@@ -18,7 +18,7 @@ if (TRAVIS_PULL_REQUEST_SLUG === "\n") {
 
 
 exec(
-  "npx lerna run report --parallel",
+  "npx lerna run report --stream",
   (err, stdout, stderr) => {
     let resultServer, resultClient, ps, pc;
     try {
