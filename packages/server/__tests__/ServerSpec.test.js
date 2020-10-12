@@ -2,7 +2,7 @@ const app = require('../index');
 const request = require('supertest');
 
 describe('서버테스트', () => {
-  test('should return movie response with status 200', async done => {
+  test('모든 영화의 정보를 요청받은 경우, 응답의 상태 코드는 200으로 설정되어야 합니다', async done => {
     return request(app)
       .get('/movies')
       .then(res => {
@@ -11,17 +11,17 @@ describe('서버테스트', () => {
         done();
       });
   });
-  test('should return all movies data', async done => {
+  test('모든 영화의 정보를 요청받은 경우, 응답으로 모든 영화의 정보를 보내줘야 합니다', async (done) => {
     return request(app)
       .get('/movies')
-      .then(res => {
+      .then((res) => {
         const { body } = res;
         expect(Array.isArray(body)).toEqual(true);
         expect(body.length).toEqual(10);
         done();
       });
   });
-  test('should return specipic movie data', async done => {
+  test('특정 id에 대한 영화정보를 요청받은 경우, 해당되는 영화의 정보를 응답으로 보내줘야 합니다', async done => {
     return request(app)
       .get('/movies/8462')
       .then(res => {
@@ -35,7 +35,7 @@ describe('서버테스트', () => {
         done();
       });
   });
-  test('should return 404 if movie is not exist', async done => {
+  test('요청받은 영화의 id가 존재하지 않는경우, 응답의 상태 코드는 404으로 설정되어야 합니다.', async done => {
     return request(app)
       .get('/movies/4639')
       .then(res => {
