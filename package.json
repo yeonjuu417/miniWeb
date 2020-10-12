@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "lerna bootstrap",
-    "test": "lerna run test",
+    "test": "lerna run test --parallel",
     "submit": "node .travis/submit.js"
   },
   "keywords": [],
