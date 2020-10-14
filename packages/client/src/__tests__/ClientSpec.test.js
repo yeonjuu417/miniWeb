@@ -1,13 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { act } from 'react-dom/test-utils'; // ES6
-import fetch from 'node-fetch';
 import MovieRankListEntry from '../MovieRankListEntry';
 import MovieRankList from '../MovieRankList';
 import CurrentMovie from '../CurrentMovie';
 import App from '../App';
-
-global.fetch = fetch;
 
 const mockMovie = [
   {
@@ -221,7 +218,7 @@ describe('CurrentMovie test', () => {
 describe('App test', () => {
   let container;
   let spy;
-  let mountSpy;
+  let fetchSpy;
   let mockApp;
 
   beforeAll(async () => {
@@ -231,9 +228,9 @@ describe('App test', () => {
     mockApp = new App();
 
     spy = jest.spyOn(App.prototype, 'handleCardClick');
-    mountSpy = jest.spyOn(global, 'fetch');
+    fetchSpy = jest.spyOn(global, 'fetch');
 
-    mountSpy.mockImplementation(() =>
+    fetchSpy.mockImplementation(() =>
       Promise.resolve({
         json: () => Promise.resolve(mockMovie),
       })
@@ -289,11 +286,5 @@ describe('App test', () => {
     expect(spy).toBeCalledTimes(1);
 
     spy.mockClear();
-  });
-
-  test('fetch를 통해 서버로부터 정보를 받아오는 과정이 있어야 합니다.', () => {
-    expect(mountSpy).toBeCalledTimes(1);
-    expect(mountSpy).toBeCalledWith('http://localhost:3000/movies'); // 나중에 배포하시기 전에 포트번호를 정해진 서버의 포트번호로 바꾸시면 됩니다.
-    mountSpy.mockClear();
   });
 });
