@@ -6,7 +6,6 @@ import MovieRankListEntry from '../MovieRankListEntry';
 import MovieRankList from '../MovieRankList';
 import CurrentMovie from '../CurrentMovie';
 import App from '../App';
-import { movies } from './fakeData.json';
 
 global.fetch = fetch;
 
@@ -92,9 +91,9 @@ describe('MovieRankListEntry test', () => {
   });
   test('유니크한 genre를 key로 지정하여 genres.map을 실행해야 합니다.', async function () {
     const cards = container.querySelectorAll('.tag');
+    let genre;
 
     for (let i = 0; i < Object.keys(cards).length; i++) {
-      let genre;
       cards[i].addEventListener('mouseover', (e) => {
         genre = e.target[Object.keys(e.target)[0]].key;
       });
@@ -144,8 +143,9 @@ describe('MovieRankList test', () => {
 
     const cards = container.querySelectorAll('.card');
 
+    let id;
+
     for (let i = 0; i < Object.keys(cards).length; i++) {
-      let id;
       cards[i].addEventListener('mouseover', (e) => {
         id = e.target[Object.keys(e.target)[0]].return.key;
       });
@@ -235,7 +235,7 @@ describe('App test', () => {
 
     mountSpy.mockImplementation(() =>
       Promise.resolve({
-        json: () => Promise.resolve(movies),
+        json: () => Promise.resolve(mockMovie),
       })
     );
 
@@ -276,15 +276,15 @@ describe('App test', () => {
 
   test('영화 목록을 클릭할 때에, `handleCardClick` 메서드를 이용해서 현재 영화정보를 업데이트해야 합니다.', () => {
     const cards = container.querySelectorAll('.card');
-    cards[2].dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    cards[1].dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
     expect(container.querySelector('.current-movie .title').innerHTML).toEqual(
-      movies[2].title
+      mockMovie[1].title
     );
 
     expect(
       container.querySelector('.current-movie .title').innerHTML
-    ).not.toEqual(movies[0].title);
+    ).not.toEqual(mockMovie[0].title);
 
     expect(spy).toBeCalledTimes(1);
 
@@ -293,6 +293,7 @@ describe('App test', () => {
 
   test('fetch를 통해 서버로부터 정보를 받아오는 과정이 있어야 합니다.', () => {
     expect(mountSpy).toBeCalledTimes(1);
+    expect(mountSpy).toBeCalledWith('http://localhost:3000/movies'); // 나중에 배포하시기 전에 포트번호를 정해진 서버의 포트번호로 바꾸시면 됩니다.
     mountSpy.mockClear();
   });
 });
