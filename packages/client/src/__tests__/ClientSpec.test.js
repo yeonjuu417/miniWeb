@@ -1,28 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { act } from 'react-dom/test-utils'; // ES6
-import fetch from 'node-fetch';
 import MovieRankListEntry from '../MovieRankListEntry';
 import MovieRankList from '../MovieRankList';
 import CurrentMovie from '../CurrentMovie';
 import App from '../App';
-import { movies } from './fakeData.json';
-
-global.fetch = fetch;
 
 const mockMovie = [
   {
-    id: 5512,
+    id: 5511,
     url: 'https://yts.lt/movie/deadpool-2016',
     title: 'Deadpool',
-    year: 2016,
-    rating: 8.6,
-    runtime: 108,
-    genres: ['Action', 'Adventure', 'Comedy', 'Romance', 'Sci-Fi'],
+    year: 2017,
+    rating: 8.5,
+    runtime: 107,
+    genres: ['Action', 'Adventure', 'Comedy', 'Romance', 'Sci-Fi', 'Mock'],
     summary:
-      'This is the origin story of former Special Forces operative turned mercenary Wade Wilson, who after being subjected to a rogue experiment that leaves him with accelerated healing powers, adopts the alter ego Deadpool. Armed with his new abilities and a dark, twisted sense of humor, Deadpool hunts down the man who nearly destroyed his life.',
+      'This is the origin story of former Special Forces operative turned mercenary Wade Wilson, who after being subjected to a rogue experiment that leaves him with accelerated healing powers, adopts the alter ego Deadpool. Armed with his new abilities and a dark, twisted sense of humor, Deadpool hunts down the man who nearly destroyed his life!',
     description_full:
-      'This is the origin story of former Special Forces operative turned mercenary Wade Wilson, who after being subjected to a rogue experiment that leaves him with accelerated healing powers, adopts the alter ego Deadpool. Armed with his new abilities and a dark, twisted sense of humor, Deadpool hunts down the man who nearly destroyed his life.',
+      'This is the origin story of former Special Forces operative turned mercenary Wade Wilson, who after being subjected to a rogue experiment that leaves him with accelerated healing powers, adopts the alter ego Deadpool. Armed with his new abilities and a dark, twisted sense of humor, Deadpool hunts down the man who nearly destroyed his life!',
     small_cover_image:
       'https://yts.lt/assets/images/movies/deadpool_2016/small-cover.jpg',
     medium_cover_image:
@@ -31,17 +27,17 @@ const mockMovie = [
       'https://yts.lt/assets/images/movies/deadpool_2016/large-cover.jpg',
   },
   {
-    id: 1267,
+    id: 1266,
     url: 'https://yts.lt/movie/furious-7-2015',
     title: 'Furious 7',
-    year: 2015,
-    rating: 7.2,
-    runtime: 137,
-    genres: ['Action', 'Adventure', 'Crime', 'Thriller'],
+    year: 2016,
+    rating: 7.1,
+    runtime: 136,
+    genres: ['Action', 'Adventure', 'Crime', 'Thriller', 'Mock'],
     summary:
-      "Dominic and his crew thought they'd left the criminal mercenary life behind. They'd defeated international terrorist Owen Shaw and went their separate ways. But now, Shaw's brother, Deckard Shaw, is out killing the crew one by one for revenge. Worse, a Somalian terrorist called Jakarde and a shady government official called \"Mr. Nobody\" are both competing to steal a computer terrorism program called \"God's Eye,\" that can turn any technological device into a weapon. Torretto must reconvene with his team to stop Shaw and retrieve the God's Eye program while caught in a power struggle between the terrorist and the United States government.",
+      "Dominic and his crew thought they'd left the criminal mercenary life behind. They'd defeated international terrorist Owen Shaw and went their separate ways. But now, Shaw's brother, Deckard Shaw, is out killing the crew one by one for revenge. Worse, a Somalian terrorist called Jakarde and a shady government official called \"Mr. Nobody\" are both competing to steal a computer terrorism program called \"God's Eye,\" that can turn any technological device into a weapon. Torretto must reconvene with his team to stop Shaw and retrieve the God's Eye program while caught in a power struggle between the terrorist and the United States government!",
     description_full:
-      "Dominic and his crew thought they'd left the criminal mercenary life behind. They'd defeated international terrorist Owen Shaw and went their separate ways. But now, Shaw's brother, Deckard Shaw, is out killing the crew one by one for revenge. Worse, a Somalian terrorist called Jakarde and a shady government official called \"Mr. Nobody\" are both competing to steal a computer terrorism program called \"God's Eye,\" that can turn any technological device into a weapon. Torretto must reconvene with his team to stop Shaw and retrieve the God's Eye program while caught in a power struggle between the terrorist and the United States government.",
+      "Dominic and his crew thought they'd left the criminal mercenary life behind. They'd defeated international terrorist Owen Shaw and went their separate ways. But now, Shaw's brother, Deckard Shaw, is out killing the crew one by one for revenge. Worse, a Somalian terrorist called Jakarde and a shady government official called \"Mr. Nobody\" are both competing to steal a computer terrorism program called \"God's Eye,\" that can turn any technological device into a weapon. Torretto must reconvene with his team to stop Shaw and retrieve the God's Eye program while caught in a power struggle between the terrorist and the United States government!",
     small_cover_image:
       'https://yts.lt/assets/images/movies/furious_seven_2015/small-cover.jpg',
     medium_cover_image:
@@ -92,9 +88,9 @@ describe('MovieRankListEntry test', () => {
   });
   test('유니크한 genre를 key로 지정하여 genres.map을 실행해야 합니다.', async function () {
     const cards = container.querySelectorAll('.tag');
+    let genre;
 
     for (let i = 0; i < Object.keys(cards).length; i++) {
-      let genre;
       cards[i].addEventListener('mouseover', (e) => {
         genre = e.target[Object.keys(e.target)[0]].key;
       });
@@ -144,8 +140,9 @@ describe('MovieRankList test', () => {
 
     const cards = container.querySelectorAll('.card');
 
+    let id;
+
     for (let i = 0; i < Object.keys(cards).length; i++) {
-      let id;
       cards[i].addEventListener('mouseover', (e) => {
         id = e.target[Object.keys(e.target)[0]].return.key;
       });
@@ -221,7 +218,7 @@ describe('CurrentMovie test', () => {
 describe('App test', () => {
   let container;
   let spy;
-  let mountSpy;
+  let fetchSpy;
   let mockApp;
 
   beforeAll(async () => {
@@ -231,11 +228,11 @@ describe('App test', () => {
     mockApp = new App();
 
     spy = jest.spyOn(App.prototype, 'handleCardClick');
-    mountSpy = jest.spyOn(global, 'fetch');
+    fetchSpy = jest.spyOn(global, 'fetch');
 
-    mountSpy.mockImplementation(() =>
+    fetchSpy.mockImplementation(() =>
       Promise.resolve({
-        json: () => Promise.resolve(movies),
+        json: () => Promise.resolve(mockMovie),
       })
     );
 
@@ -276,23 +273,18 @@ describe('App test', () => {
 
   test('영화 목록을 클릭할 때에, `handleCardClick` 메서드를 이용해서 현재 영화정보를 업데이트해야 합니다.', () => {
     const cards = container.querySelectorAll('.card');
-    cards[2].dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    cards[1].dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
     expect(container.querySelector('.current-movie .title').innerHTML).toEqual(
-      movies[2].title
+      mockMovie[1].title
     );
 
     expect(
       container.querySelector('.current-movie .title').innerHTML
-    ).not.toEqual(movies[0].title);
+    ).not.toEqual(mockMovie[0].title);
 
     expect(spy).toBeCalledTimes(1);
 
     spy.mockClear();
-  });
-
-  test('fetch를 통해 서버로부터 정보를 받아오는 과정이 있어야 합니다.', () => {
-    expect(mountSpy).toBeCalledTimes(1);
-    mountSpy.mockClear();
   });
 });
