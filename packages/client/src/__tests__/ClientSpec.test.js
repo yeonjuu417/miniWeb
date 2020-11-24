@@ -12,7 +12,7 @@ const mockMovie = [
     url: 'https://yts.lt/movie/deadpool-2016',
     title: 'Deadpool',
     year: 2017,
-    rating: 8.5,
+    rating: 8.6,
     runtime: 107,
     genres: ['Action', 'Adventure', 'Comedy', 'Romance', 'Sci-Fi', 'Mock'],
     summary:
