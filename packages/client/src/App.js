@@ -11,7 +11,7 @@ function App() {
       </div>
       <div className="body">
         <CurrentMovie />
-        <MovieRankList />
+        <MovieRankList movies={[]} />
       </div>
     </>
   );
