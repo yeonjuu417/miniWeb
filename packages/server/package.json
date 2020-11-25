@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "startServer": "nodemon ./index.js",
     "test": "NODE_ENV=test jest ./__tests__/",
     "report": "NODE_ENV=test jest ./__tests__/ --json --outputFile=report.json"
   },
